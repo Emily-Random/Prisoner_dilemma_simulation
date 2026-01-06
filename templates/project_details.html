@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details - Prisoner's Dilemma Evolution Simulation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        html, body {
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: auto;
+            min-height: 100vh;
+        }
+        body {
+            background-color: var(--bg-primary, #000000);
+            color: var(--text-primary, #ffffff);
+        }
+        .details-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        .details-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #0074D9;
+        }
+        .details-header h1 {
+            color: #0074D9;
+            margin-bottom: 10px;
+        }
+        .details-header p {
+            color: #ffffff;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            color: #0074D9;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .details-section {
+            margin-bottom: 40px;
+        }
+        .details-section h2 {
+            color: #00ff00;
+            margin-bottom: 15px;
+        }
+        .details-section h3 {
+            color: #ffffff;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        .details-section p {
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+        .details-section ul, .details-section ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        .details-section li {
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+        .details-section strong {
+            color: #ffffff;
+        }
+        .code-block {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <div class="details-container">
+        <a href="{{ url_for('index') }}" class="back-link">← Back to Simulation</a>
+        
+        <div class="details-header">
+            <h1>Prisoner's Dilemma Evolution Simulation</h1>
+            <p>Made by ET</p>
+        </div>
+
+        <div class="details-section">
+            <h2>Project Overview</h2>
+            <p>
+                This project simulates the evolution of different strategies in the Prisoner's Dilemma game 
+                over multiple generations. The simulation models how different behavioral strategies compete, 
+                reproduce, and evolve based on their performance in iterated games.
+            </p>
+        </div>
+
+        <div class="details-section">
+            <h2>Background: The Prisoner's Dilemma</h2>
+            <p>
+                The Prisoner's Dilemma is a classic game theory scenario where two players must choose 
+                between cooperation and defection. The payoff structure creates a tension between individual 
+                rationality (defecting) and collective benefit (cooperating).
+            </p>
+            <p>
+                In this simulation, we explore how different strategies evolve when players interact repeatedly 
+                and their reproductive success depends on their accumulated payoffs.
+            </p>
+        </div>
+
+        <div class="details-section">
+            <h2>Available Strategies</h2>
+            
+            <h3>Always Cooperate</h3>
+            <p>
+                This strategy always chooses to cooperate, regardless of the opponent's previous actions. 
+                It represents unconditional cooperation.
+            </p>
+
+            <h3>Always Defect</h3>
+            <p>
+                This strategy always chooses to defect, regardless of the opponent's previous actions. 
+                It represents unconditional defection.
+            </p>
+
+            <h3>Tit-for-Tat</h3>
+            <p>
+                This strategy starts by cooperating, then copies the opponent's last move in subsequent rounds. 
+                It is known for being both nice (starts cooperatively) and retaliatory (responds to defection).
+            </p>
+
+            <h3>Grudge</h3>
+            <p>
+                This strategy cooperates until the opponent defects once, then permanently switches to defection 
+                for the remainder of the encounter. It forgives nothing once betrayed.
+            </p>
+
+            <h3>Prober</h3>
+            <p>
+                This strategy mostly cooperates but occasionally defects during long sequences of mutual cooperation. 
+                It "probes" the opponent's response to defection while generally maintaining cooperation.
+            </p>
+
+            <h3>Random</h3>
+            <p>
+                This strategy makes random choices between cooperation and defection each round, with equal probability.
+            </p>
+        </div>
+
+        <div class="details-section">
+            <h2>Simulation Parameters</h2>
+            
+            <h3>Initial Population (N₀)</h3>
+            <p>The starting number of agents in the simulation.</p>
+
+            <h3>Strategy Proportions</h3>
+            <p>
+                The initial distribution of strategies in the population. These values must sum to exactly 1.0. 
+                You can set a proportion to 0 to exclude a strategy from the initial population.
+            </p>
+
+            <h3>Payoff Matrix</h3>
+            <p>
+                The payoff values for different action combinations:
+            </p>
+            <ul>
+                <li><strong>CC (Both Cooperate):</strong> Reward (R) - typically the second-highest payoff</li>
+                <li><strong>CD (You Cooperate, Opponent Defects):</strong> Sucker's Payoff (S) - typically the lowest payoff</li>
+                <li><strong>DC (You Defect, Opponent Cooperates):</strong> Temptation (T) - typically the highest payoff</li>
+                <li><strong>DD (Both Defect):</strong> Punishment (P) - typically the second-lowest payoff</li>
+            </ul>
+            <p>
+                For a valid Prisoner's Dilemma, the payoffs must satisfy: <span class="highlight">T > R > P > S</span> 
+                and typically <span class="highlight">2R > T + S</span>.
+            </p>
+
+            <h3>Total Generations (G)</h3>
+            <p>The number of generations to simulate.</p>
+
+            <h3>Recording Interval (T)</h3>
+            <p>How often (in generations) to record and display the population state.</p>
+
+            <h3>Rounds per Encounter (R)</h3>
+            <p>The number of Prisoner's Dilemma rounds each pair of agents plays when they meet.</p>
+
+            <h3>Selection Percentile (Y%)</h3>
+            <p>
+                The bottom Y% of agents (by accumulated score) are eliminated each generation. 
+                The remaining survivors reproduce to form the next generation.
+            </p>
+
+            <h3>Offspring per Survivor</h3>
+            <p>
+                Each surviving agent produces this many offspring in the next generation. 
+                Note: This means the population size can change over time.
+            </p>
+
+            <h3>Mutation Rate (Z)</h3>
+            <p>
+                The probability that an offspring will have a random strategy instead of inheriting 
+                the parent's strategy. This introduces genetic diversity into the population.
+            </p>
+        </div>
+
+        <div class="details-section">
+            <h2>How the Simulation Works</h2>
+            
+            <h3>Generation 0 (Initialization)</h3>
+            <p>
+                The population is created with the specified initial size and strategy proportions. 
+                This state is recorded as generation 0.
+            </p>
+
+            <h3>For Each Generation (1 to G):</h3>
+            <ol>
+                <li>
+                    <strong>Reset Scores:</strong> All agents' scores are reset to 0.
+                </li>
+                <li>
+                    <strong>Random Pairing:</strong> Agents are randomly paired (if odd population, 
+                    one agent sits out).
+                </li>
+                <li>
+                    <strong>Play Encounters:</strong> Each pair plays R rounds of Prisoner's Dilemma 
+                    according to their strategies. Scores accumulate based on the payoff matrix.
+                </li>
+                <li>
+                    <strong>Selection:</strong> The bottom Y% of agents (by score) are eliminated.
+                </li>
+                <li>
+                    <strong>Reproduction:</strong> Each survivor produces X offspring (where X is 
+                    "Offspring per Survivor"). Each offspring has a Z% chance of mutation (random strategy).
+                </li>
+                <li>
+                    <strong>Recording:</strong> If this generation is a multiple of the recording interval, 
+                    the population composition is recorded.
+                </li>
+            </ol>
+        </div>
+
+        <div class="details-section">
+            <h2>Visualization</h2>
+            <p>
+                The simulation provides two main visualizations:
+            </p>
+            <ul>
+                <li>
+                    <strong>Population Over Time:</strong> A stacked line chart showing how the population 
+                    of each strategy changes across generations.
+                </li>
+                <li>
+                    <strong>Final Proportions:</strong> A bar chart showing the final distribution of strategies 
+                    at the end of the simulation.
+                </li>
+            </ul>
+        </div>
+
+        <div class="details-section">
+            <h2>Technical Details</h2>
+            <p>
+                This simulation is built using:
+            </p>
+            <ul>
+                <li><strong>Backend:</strong> Python with Flask for the API server</li>
+                <li><strong>Frontend:</strong> HTML, CSS, and JavaScript with Chart.js for visualizations</li>
+                <li><strong>Optimization:</strong> Numba JIT compilation for efficient computation of large simulations</li>
+            </ul>
+        </div>
+
+        <div class="details-section">
+            <h2>Interpreting Results</h2>
+            <p>
+                When analyzing simulation results, consider:
+            </p>
+            <ul>
+                <li>Which strategies survive and thrive in the long term?</li>
+                <li>How do different payoff matrices affect strategy evolution?</li>
+                <li>What role does mutation play in maintaining diversity?</li>
+                <li>How does the selection pressure (Y%) affect outcomes?</li>
+                <li>What happens when population size changes over time?</li>
+            </ul>
+        </div>
+
+        <div class="details-section">
+            <h2>Contact Info</h2>
+            <p>
+                This project is made by ET. Check out this project, as well as many others, on my Github page!
+            </p>
+            <ul>
+                <li><a href="https://github.com/Emily-Random" target="_blank">My Github Page</a></li>
+            </ul>
+        </div>
+
+        <div style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 2px solid #0074D9;">
+            <a href="{{ url_for('index') }}" class="back-link">← Return to Simulation</a>
+        </div>
+    </div>
+</body>
+</html>
+

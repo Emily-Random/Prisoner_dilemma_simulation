@@ -22,6 +22,12 @@ def index():  # Function to serve the main HTML page
     return render_template('index.html')  # Return the HTML template file to the browser
 
 
+@app.route('/project-details')  # Decorator: register this function to handle requests to '/project-details'
+def project_details():  # Function to serve the detailed project documentation page
+    """Serve the detailed project documentation page."""
+    return render_template('project_details.html')  # Return the detailed documentation HTML template file to the browser
+
+
 @app.route('/api/run_simulation', methods=['POST'])  # Decorator: register endpoint for POST requests to '/api/run_simulation'
 def run_simulation():  # Function to handle simulation run requests
     """

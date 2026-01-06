@@ -376,6 +376,27 @@ h2 {
     line-height: 1.6;
 }
 
+.details-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: var(--accent);
+    color: var(--bg-primary);
+    text-decoration: none;
+    border: none;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 4px;
+}
+
+.details-button:hover {
+    background-color: var(--accent-hover);
+    text-decoration: none;
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
     width: 10px;
