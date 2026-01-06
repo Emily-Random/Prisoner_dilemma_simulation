@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prisoner's Dilemma Evolution Simulation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Panel: Input Controls -->
+        <div class="panel left-panel">
+            <h2>Simulation Parameters</h2>
+            
+            <div class="input-group">
+                <label for="initial_population">Initial Population (N₀):</label>
+                <input type="number" id="initial_population" value="100" min="2" step="1">
+            </div>
+            
+            <div class="input-group">
+                <label>Available Strategies:</label>
+                <div class="strategy-checkboxes">
+                    <label><input type="checkbox" class="strategy-check" value="Always Cooperate" checked> Always Cooperate</label>
+                    <label><input type="checkbox" class="strategy-check" value="Always Defect" checked> Always Defect</label>
+                    <label><input type="checkbox" class="strategy-check" value="Tit-for-Tat" checked> Tit-for-Tat</label>
+                    <label><input type="checkbox" class="strategy-check" value="Grudge" checked> Grudge</label>
+                    <label><input type="checkbox" class="strategy-check" value="Prober" checked> Prober</label>
+                    <label><input type="checkbox" class="strategy-check" value="Random" checked> Random</label>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label>Initial Strategy Proportions (must sum to 1.0):</label>
+                <div id="strategy-proportions" class="strategy-proportions"></div>
+            </div>
+            
+            <div class="input-group">
+                <label>Payoff Matrix:</label>
+                <table class="payoff-matrix">
+                    <tr>
+                        <th></th>
+                        <th>Cooperate</th>
+                        <th>Defect</th>
+                    </tr>
+                    <tr>
+                        <th>Cooperate</th>
+                        <td><input type="number" id="payoff_CC" value="3" step="0.1"></td>
+                        <td><input type="number" id="payoff_CD" value="0" step="0.1"></td>
+                    </tr>
+                    <tr>
+                        <th>Defect</th>
+                        <td><input type="number" id="payoff_DC" value="5" step="0.1"></td>
+                        <td><input type="number" id="payoff_DD" value="1" step="0.1"></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="input-group">
+                <label for="total_generations">Total Generations (G):</label>
+                <input type="number" id="total_generations" value="100" min="1" step="1">
+            </div>
+            
+            <div class="input-group">
+                <label for="recording_interval">Recording Interval (T):</label>
+                <input type="number" id="recording_interval" value="5" min="1" step="1">
+            </div>
+            
+            <div class="input-group">
+                <label for="rounds_per_encounter">Rounds per Encounter (R):</label>
+                <input type="number" id="rounds_per_encounter" value="10" min="1" step="1">
+            </div>
+            
+            <div class="input-group" id="prober-rounds-group" style="display: none;">
+                <label for="prober_total_rounds">Prober Total Rounds:</label>
+                <input type="number" id="prober_total_rounds" value="10" min="1" step="1">
+                <span class="help-text">Number of rounds for Prober strategy cycle</span>
+            </div>
+            
+            <div class="input-group">
+                <label for="selection_percentile">Selection Percentile (Y%):</label>
+                <input type="number" id="selection_percentile" value="0.1" min="0" max="0.99" step="0.01">
+                <span class="help-text">Bottom Y% eliminated each generation</span>
+            </div>
+            
+            <div class="input-group">
+                <label for="mutation_rate">Mutation Rate (Z):</label>
+                <input type="number" id="mutation_rate" value="0.01" min="0" max="1" step="0.01">
+                <span class="help-text">Probability of mutation per offspring</span>
+            </div>
+            
+            <div class="input-group">
+                <label for="offspring_per_survivor">Offspring per Survivor:</label>
+                <input type="number" id="offspring_per_survivor" value="1" min="1" step="1">
+                <span class="help-text">Number of children each surviving player produces</span>
+            </div>
+            
+            <button id="run-button" class="run-button">Run Simulation</button>
+            <div id="status-message" class="status-message"></div>
+        </div>
+        
+        <!-- Center Panel: Visualization -->
+        <div class="panel center-panel">
+            <div class="visualization-header">
+                <h2>Visualization</h2>
+            </div>
+            
+            <!-- Statistical View -->
+            <div id="statistical-view" class="visualization-mode">
+                <div class="chart-container">
+                    <canvas id="population-chart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="proportion-chart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Panel: Documentation -->
+        <div class="panel right-panel">
+            <h2>Documentation</h2>
+            <div class="documentation-content">
+                <!-- Left blank as per specification -->
+            </div>
+        </div>
+        
+        <!-- Bottom Panel: Terminal Output -->
+        <div class="panel bottom-panel">
+            <h2>Terminal Output</h2>
+            <div id="terminal-output" class="terminal-output"></div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
+
